@@ -1,0 +1,201 @@
+/* --- Download Button --- */
+.sp-download-btn {
+    background-color: transparent;
+    border: none;
+    padding: 0 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.7;
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+.sp-download-btn:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.sp-download-btn svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+}
+
+/* --- Built-in Popover --- */
+.sp-popover {
+    position: absolute;
+    background-color: #282828;
+    color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+    width: 320px;
+    font-family: 'CircularSp', 'Helvetica', 'Arial', sans-serif;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.2s, transform 0.2s;
+    pointer-events: none;
+}
+
+.sp-popover.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+/* Close Button (X) */
+.sp-popover-close-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 24px;
+    height: 24px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+    z-index: 1; /* Ensure it's above other content */
+}
+
+.sp-popover-close-btn:hover {
+    opacity: 1;
+}
+
+.sp-popover-close-btn svg {
+    width: 100%;
+    height: 100%;
+    fill: #b3b3b3;
+}
+
+/* --- Popover Content & Loader --- */
+.sp-popover-loader { 
+    padding: 20px; 
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #b3b3b3;
+}
+
+/* Animated dots for the loader */
+.sp-popover-loader .dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background-color: #b3b3b3;
+    border-radius: 50%;
+    margin: 0 2px;
+    animation: bounce 1.4s infinite ease-in-out both;
+}
+.sp-popover-loader .dot:nth-child(1) { animation-delay: -0.32s; }
+.sp-popover-loader .dot:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes bounce {
+    0%, 80%, 100% {
+        transform: scale(0);
+    } 40% {
+        transform: scale(1.0);
+    }
+}
+
+.sp-popover-content { 
+    display: flex; 
+    align-items: center; 
+    padding: 12px; 
+}
+.sp-popover-cover { 
+    width: 60px; 
+    height: 60px; 
+    border-radius: 6px; 
+    margin-right: 12px; 
+    flex-shrink: 0; 
+}
+.sp-popover-info { 
+    flex-grow: 1; 
+    overflow: hidden; 
+}
+.sp-popover-title { 
+    font-weight: bold; 
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    margin-bottom: 4px; 
+}
+.sp-popover-artist { 
+    font-size: 0.9em; 
+    color: #b3b3b3; 
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    margin-bottom: 8px; 
+}
+.sp-popover-confidence { 
+    font-size: 0.8em; 
+    font-weight: bold; 
+    color: #1ed760; 
+}
+.sp-popover-downloads { 
+    display: flex; 
+    gap: 8px; 
+    margin-top: 10px; 
+}
+
+/* --- Download Button in Popover --- */
+.sp-popover-btn {
+    position: relative;
+    padding: 6px 12px;
+    border: 1px solid #535353;
+    background-color: #3e3e3e;
+    color: #fff;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.8em;
+    font-weight: bold;
+    transition: background-color 0.2s, transform 0.2s, color 0.2s;
+    overflow: hidden;
+}
+
+.sp-popover-btn:hover:not(:disabled) {
+    background-color: #535353;
+    transform: scale(1.05);
+}
+
+.sp-popover-btn:disabled {
+    cursor: default;
+    color: #888;
+}
+
+.sp-popover-btn.is-downloading {
+    pointer-events: none;
+    color: #b3b3b3;
+}
+
+/* --- Border Animation --- */
+.sp-popover-btn.is-downloading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background-color: #1ed760;
+    animation: loading-border 1.5s linear infinite;
+}
+
+@keyframes loading-border {
+    0% {
+        width: 0%;
+        left: 0;
+    }
+    50% {
+        width: 100%;
+        left: 0;
+    }
+    100% {
+        width: 0%;
+        left: 100%;
+    }
+}

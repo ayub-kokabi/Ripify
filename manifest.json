@@ -1,0 +1,38 @@
+{
+  "manifest_version": 3,
+  "name": "Spotify Native Downloader",
+  "version": "4.0",
+  "description": "Adds a native download popover to Spotify track rows.",
+  "permissions": [
+    "downloads"
+  ],
+  "host_permissions": [
+    "https://us.qqdl.site/api/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://open.spotify.com/*"],
+      "js": [
+        "lib/string-similarity.min.js",
+        "content.js"
+      ],
+      "css": [
+        "content.css"
+      ]
+    }
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["icons/*.png"],
+      "matches": ["https://open.spotify.com/*"]
+    }
+  ]
+}
