@@ -1,25 +1,25 @@
-// --- Constants ---
-const TRACK_ROW_SELECTOR = '[data-testid="tracklist-row"]';
-const TITLE_SELECTOR = 'a[data-testid="internal-track-link"] > div';
-const ARTIST_SELECTOR = 'span > div > a[href*="/artist/"]';
-const DURATION_COLUMN_SELECTOR = '[role="gridcell"][aria-colindex="5"]';
+const PLAYLIST_TRACK_ROW_SELECTOR = '[data-testid="tracklist-row"]';
+const SINGLE_TRACK_ACTION_BAR_SELECTOR = '[data-testid="action-bar-row"]';
 const BUTTON_CLASS = 'sp-download-btn';
 
-// --- Global State ---
 let activePopover = null;
 
-console.log('Spotify Native Downloader: Content script loaded.');
+function injectButtons() {
+    injectIntoPlaylist();
+    injectIntoSingleTrackPage();
+}
 
-// --- Main Function to Inject Buttons ---
-function injectDownloadButtons() {
-    // ... (این تابع بدون تغییر باقی می‌ماند)
-    const trackRows = document.querySelectorAll(TRACK_ROW_SELECTOR);
+function injectIntoPlaylist() {
+    const trackRows = document.querySelectorAll(PLAYLIST_TRACK_ROW_SELECTOR);
     trackRows.forEach(row => {
         if (row.querySelector(`.${BUTTON_CLASS}`)) return;
-        const titleEl = row.querySelector(TITLE_SELECTOR);
-        const artistEls = row.querySelectorAll(ARTIST_SELECTOR);
-        const durationCol = row.querySelector(DURATION_COLUMN_SELECTOR);
+
+        const titleEl = row.querySelector('a[data-testid="internal-track-link"] > div');
+        const artistEls = row.querySelectorAll('span > div > a[href*="/artist/"]');
+        const durationCol = row.querySelector('[role="gridcell"][aria-colindex="5"]');
+
         if (!titleEl || artistEls.length === 0 || !durationCol) return;
+
         const button = createDownloadButton();
         button.addEventListener('click', (event) => {
             event.stopPropagation();
@@ -29,6 +29,7 @@ function injectDownloadButtons() {
             const trackArtists = Array.from(artistEls).map(el => el.textContent.trim()).join(', ');
             showPopoverForButton(button, trackTitle, trackArtists);
         });
+
         const moreButton = durationCol.querySelector('[data-testid="more-button"]');
         if (moreButton && moreButton.parentElement) {
             moreButton.parentElement.insertBefore(button, moreButton);
@@ -38,14 +39,54 @@ function injectDownloadButtons() {
     });
 }
 
-function createDownloadButton() {
+function injectIntoSingleTrackPage() {
+    const actionBar = document.querySelector(SINGLE_TRACK_ACTION_BAR_SELECTOR);
+    if (!actionBar || actionBar.querySelector(`.${BUTTON_CLASS}`)) return;
+
+    if (!window.location.pathname.includes('/track/')) return;
+
+    const titleEl = document.querySelector('[data-testid="entityTitle"] > h1');
+    const artistEl = document.querySelector('[data-testid="creator-link"]');
+
+    if (!titleEl || !artistEl) return;
+
+    const trackTitle = titleEl.textContent.trim();
+    const trackArtists = artistEl.textContent.trim();
+
+    const button = createDownloadButton(true);
+
+    button.addEventListener('click', (event) => {
+        event.stopPropagation();
+        if (activePopover && activePopover.trigger === button) return;
+        closeActivePopover();
+        showPopoverForButton(button, trackTitle, trackArtists);
+    });
+
+    const saveButton = actionBar.querySelector('[data-testid="add-button"]');
+    if (saveButton && saveButton.parentElement) {
+        saveButton.parentElement.insertBefore(button, saveButton.nextSibling);
+    } else {
+        actionBar.appendChild(button);
+    }
+}
+
+function createDownloadButton(isLarge = false) {
     const button = document.createElement('button');
     button.className = BUTTON_CLASS;
-    button.innerHTML = `<svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>`;
+    if (isLarge) {
+        button.classList.add('ripify-download-button');
+    }
+
+    button.innerHTML = `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="64" height="64" fill="none">
+  <path fill="#fff" fill-rule="evenodd" clip-rule="evenodd" d="M8 10a4 4 0 1 1 8 0v1h1a3.5 3.5 0 1 1 0 7h-.1a1 1 0 1 0 0 2h.1a5.5 5.5 0 0 0 .93-10.92 6 6 0 0 0-11.86 0A5.5 5.5 0 0 0 7 20h.1a1 1 0 1 0 0-2H7a3.5 3.5 0 1 1 0-7h1v-1Zm5 1a1 1 0 1 0-2 0v5.59l-1.3-1.3a1 1 0 0 0-1.4 1.42l3 3a1 1 0 0 0 1.4 0l3-3a1 1 0 0 0-1.4-1.42L13 16.6V11Z"/>
+</svg>
+
+
+    `;
     return button;
 }
 
-// --- Popover Management ---
 function showPopoverForButton(button, title, artists) {
     const popover = document.createElement('div');
     popover.className = 'sp-popover';
@@ -80,7 +121,7 @@ async function fetchAndPopulatePopover(popover, title, artists) {
         if (response.success) {
             populatePopoverContent(popover, response.data, title, artists);
         } else {
-            popover.innerHTML = `<div class="sp-popover-content">${response.error}</div>`;
+            popover.innerHTML = `<div class="sp-popover-content" style="padding: 12px;">${response.error}</div>`;
         }
     } catch (error) {
         popover.innerHTML = `<div class="sp-popover-content">Error: ${error.message}</div>`;
@@ -108,8 +149,7 @@ function populatePopoverContent(popoverElement, data, originalTitle, originalArt
                 </div>
             </div>
         </div>`;
-    
-    // Add listener for the new close button
+
     popoverElement.querySelector('.sp-popover-close-btn').addEventListener('click', closeActivePopover);
 
     popoverElement.querySelectorAll('.sp-popover-btn').forEach(button => {
@@ -121,7 +161,7 @@ function populatePopoverContent(popoverElement, data, originalTitle, originalArt
             const filename = `${originalTitle} - ${originalArtists}`;
             const quality = button.dataset.quality;
             const trackId = data.trackId;
-            
+
             chrome.runtime.sendMessage({
                 action: 'directDownload',
                 trackId: trackId,
@@ -141,21 +181,18 @@ function populatePopoverContent(popoverElement, data, originalTitle, originalArt
     });
 }
 
-// --- Global Event Listeners ---
 document.addEventListener('click', (event) => {
     if (activePopover && !activePopover.element.contains(event.target) && !activePopover.trigger.contains(event.target)) {
         closeActivePopover();
     }
 });
 
-// NEW: Close popover with the Escape key
 document.addEventListener('keydown', (event) => {
     if (event.key === "Escape") {
         closeActivePopover();
     }
 });
 
-// --- Observer to handle dynamic content ---
-const observer = new MutationObserver(() => requestIdleCallback(injectDownloadButtons));
+const observer = new MutationObserver(() => requestIdleCallback(injectButtons));
 observer.observe(document.body, { childList: true, subtree: true });
-requestIdleCallback(injectDownloadButtons);
+requestIdleCallback(injectButtons);

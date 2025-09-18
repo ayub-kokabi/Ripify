@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Spotify Native Downloader",
-  "version": "4.0",
-  "description": "Adds a native download popover to Spotify track rows.",
+  "name": "Ripify",
+  "version": "1.0",
+  "description": "Download Spotify musics (100% Free & Open Source)",
   "permissions": [
     "downloads"
   ],
@@ -16,7 +16,6 @@
     {
       "matches": ["https://open.spotify.com/*"],
       "js": [
-        "lib/string-similarity.min.js",
         "content.js"
       ],
       "css": [
@@ -29,10 +28,10 @@
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
   },
-  "web_accessible_resources": [
-    {
-      "resources": ["icons/*.png"],
-      "matches": ["https://open.spotify.com/*"]
-    }
-  ]
+"web_accessible_resources": [
+  {
+    "resources": ["icons/*.png"],
+    "matches": ["<all_urls>"]
+  }
+]
 }
