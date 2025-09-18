@@ -1,6 +1,6 @@
 # Ripify
 
-**Download Spotify Music — Free**
+**Download Spotify Music for Free**
 
 Ripify lets you download spotify tracks instantly and for free.
 
