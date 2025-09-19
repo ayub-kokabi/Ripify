@@ -4,7 +4,7 @@
 
 Ripify lets you download spotify tracks instantly and for free.
 
-## Installation (Offline)
+## Installation
 1. [Download the ZIP file](https://github.com/ayub-kokabi/Ripify/archive/refs/heads/main.zip).  
 2. Extract the ZIP file to get the folder (e.g., `Ripify-main`).  
 3. Open Chrome and go to `chrome://extensions`.  
