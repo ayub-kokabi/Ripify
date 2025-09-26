@@ -223,7 +223,7 @@ function populatePopoverContent(popoverElement, data, originalTitle, originalArt
     if (retryBtn) {
         retryBtn.addEventListener('click', (event) => {
             event.stopPropagation();
-            body.innerHTML = `<div class="sp-popover-loader">Asking AI...<span class="dot"></span><span class="dot"></span><span class="dot"></span></div>`;
+            body.innerHTML = `<div class="sp-popover-loader">Asking AI<span class="dot"></span><span class="dot"></span><span class="dot"></span></div>`;
             fetchAndPopulatePopover(popoverElement, originalTitle, originalArtists, true);
         });
     }
