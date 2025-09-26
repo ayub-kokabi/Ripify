@@ -77,7 +77,7 @@ function showPopoverForButton(button, title, artists) {
             <svg viewBox="0 0 24 24"><path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
         </button>
         <div class="sp-popover-body">
-            <div class="sp-popover-loader">Loading<span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+            <div class="sp-popover-loader">Searching<span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
         </div>
     `;
     popover.querySelector('.sp-popover-close-btn').addEventListener('click', closeActivePopover);
@@ -145,7 +145,7 @@ function showNotFoundInPopover(popover, message, originalTitle, originalArtists,
     if (retryBtn) {
         retryBtn.addEventListener('click', (event) => {
             event.stopPropagation();
-            body.innerHTML = `<div class="sp-popover-loader">Asking AI<span class="dot"></span><span class="dot"></span><span class="dot"></span></div>`;
+            body.innerHTML = `<div class="sp-popover-loader">Searching with AI<span class="dot"></span><span class="dot"></span><span class="dot"></span></div>`;
             fetchAndPopulatePopover(popover, originalTitle, originalArtists, true);
         });
     }
@@ -223,7 +223,7 @@ function populatePopoverContent(popoverElement, data, originalTitle, originalArt
     if (retryBtn) {
         retryBtn.addEventListener('click', (event) => {
             event.stopPropagation();
-            body.innerHTML = `<div class="sp-popover-loader">Asking AI<span class="dot"></span><span class="dot"></span><span class="dot"></span></div>`;
+            body.innerHTML = `<div class="sp-popover-loader">Searching with AI<span class="dot"></span><span class="dot"></span><span class="dot"></span></div>`;
             fetchAndPopulatePopover(popoverElement, originalTitle, originalArtists, true);
         });
     }
