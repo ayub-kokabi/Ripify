@@ -34,6 +34,9 @@
     transform: translateY(10px);
     transition: opacity 0.2s, transform 0.2s;
     pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
 }
 
 .sp-popover.is-visible {
@@ -54,7 +57,7 @@
     padding: 0;
     opacity: 0.7;
     transition: opacity 0.2s;
-    z-index: 1;
+    z-index: 10;
 }
 
 .sp-popover-close-btn:hover {
@@ -65,6 +68,10 @@
     width: 100%;
     height: 100%;
     fill: #b3b3b3;
+}
+
+.sp-popover-body {
+    padding: 16px;
 }
 
 .sp-popover-loader { 
@@ -98,8 +105,7 @@
 
 .sp-popover-content { 
     display: flex; 
-    align-items: center; 
-    padding: 12px; 
+    align-items: flex-start;
 }
 .sp-popover-cover { 
     width: 60px; 
@@ -125,12 +131,6 @@
     white-space: nowrap; 
     overflow: hidden; 
     text-overflow: ellipsis; 
-    margin-bottom: 8px; 
-}
-.sp-popover-confidence { 
-    font-size: 0.8em; 
-    font-weight: bold; 
-    color: #1ed760; 
 }
 .sp-popover-downloads { 
     display: flex; 
@@ -191,4 +191,43 @@
         width: 0%;
         left: 100%;
     }
+}
+
+.sp-popover-match-method {
+    font-size: 0.7em;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    border: 1px solid #535353;
+    background: transparent;
+}
+
+.method-standard {
+    color: #b3b3b3;
+}
+
+.method-ai {
+    color: #d1aaff;
+    border-color: #5a3d7e;
+}
+
+.sp-popover-retry-ai-btn {
+    background: transparent;
+    border: none;
+    color: #b3b3b3;
+    padding: 4px 0;
+    font-size: 0.8em;
+    margin-top: 12px;
+    cursor: pointer;
+    transition: color 0.2s;
+    width: auto;
+    text-align: left;
+}
+
+.sp-popover-retry-ai-btn:hover {
+    color: #fff;
+    text-decoration: underline;
 }

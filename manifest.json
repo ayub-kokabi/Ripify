@@ -1,13 +1,15 @@
 {
   "manifest_version": 3,
   "name": "Ripify",
-  "version": "1.0",
+  "version": "2.0",
   "description": "Download Spotify musics (100% Free & Open Source)",
   "permissions": [
-    "downloads"
+    "downloads",
+    "storage"
   ],
   "host_permissions": [
-    "https://us.qqdl.site/api/*"
+    "https://us.qqdl.site/api/*",
+    "https://generativelanguage.googleapis.com/*"
   ],
   "background": {
     "service_worker": "background.js"
@@ -27,6 +29,15 @@
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    },
+    "default_title": "Ripify Settings"
   },
 "web_accessible_resources": [
   {
