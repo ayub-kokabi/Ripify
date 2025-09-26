@@ -1,5 +1,5 @@
 # Ripify
-Ripify lets you download spotify tracks instantly and for free.
+Download spotify tracks instantly and for free.
 
 ## Installation
 1. [Download the ZIP file](https://github.com/ayub-kokabi/Ripify/archive/refs/heads/main.zip).  
