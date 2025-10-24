@@ -179,15 +179,21 @@ function populatePopoverContent(popoverElement, data, originalTitle, originalArt
     const body = popoverElement.querySelector('.sp-popover-body');
     if (!body) return;
 
+    const methodUsed = data.usedAI ? 'AI' : 'Standard';
+    const methodClass = data.usedAI ? 'method-ai' : 'method-standard';
+    const methodLabelHTML = `<span class="sp-popover-match-method ${methodClass}">${methodUsed} Match</span>`;
+    
     const coverUrl = data.coverUrl || chrome.runtime.getURL('icons/icon48.png');
     const mp3ButtonHTML = data.qualities.mp3_320 ? `<button class="sp-popover-btn" data-quality="5">MP3 320</button>` : '';
     const flacButtonHTML = data.qualities.flac ? `<button class="sp-popover-btn" data-quality="27">FLAC</button>` : '';
-    const retryButtonHTML = !wasForcedAI ? `<button class="sp-popover-retry-ai-btn">Wrong? Try with AI</button>` : '';
+    
+    const retryButtonHTML = !data.usedAI ? `<button class="sp-popover-retry-ai-btn"> Wrong? Try searching with AI</button>` : '';
 
     body.innerHTML = `
         <div class="sp-popover-content">
             <img src="${coverUrl}" class="sp-popover-cover" alt="Album Cover">
             <div class="sp-popover-info">
+                ${methodLabelHTML}
                 <div class="sp-popover-title" title="${data.foundTitle}">${data.foundTitle}</div>
                 <div class="sp-popover-artist" title="${data.foundArtists}">${data.foundArtists}</div>
                 <div class="sp-popover-downloads">
@@ -228,6 +234,7 @@ function populatePopoverContent(popoverElement, data, originalTitle, originalArt
         });
     }
 }
+
 
 document.addEventListener('click', (event) => {
     if (activePopover && !activePopover.element.contains(event.target) && !activePopover.trigger.contains(event.target)) {

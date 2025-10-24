@@ -1,14 +1,15 @@
 {
   "manifest_version": 3,
   "name": "Ripify",
-  "version": "2.0",
+  "version": "2.1",
   "description": "Download Spotify musics (100% Free & Open Source)",
   "permissions": [
     "downloads",
     "storage"
   ],
   "host_permissions": [
-    "https://us.qqdl.site/api/*",
+    "https://maus.qqdl.site/*",
+    "https://hund.qqdl.site/*",
     "https://generativelanguage.googleapis.com/*"
   ],
   "background": {
@@ -41,7 +42,7 @@
   },
 "web_accessible_resources": [
   {
-    "resources": ["icons/*.png"],
+    "resources": ["icons/*.png", "resources/*"],
     "matches": ["<all_urls>"]
   }
 ]
